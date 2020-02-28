@@ -1,0 +1,196 @@
+---
+title: "Ricky Duran's CV"
+author: Ricky Duran
+date: "`r Sys.Date()`"
+output:
+  pagedown::html_resume:
+    css: ['css/styles.css', 'resume']
+    # set it to true for a self-contained HTML page but it'll take longer to render
+    self_contained: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+
+library(glue)
+library(tidyverse)
+
+# Set this to true to have links turned into footnotes at the end of the document
+PDF_EXPORT <- FALSE
+
+# Holds all the links that were inserted for placement at the end
+links <- c()
+
+source('parsing_functions.R')
+
+# Load csv with position info
+position_data <- read_csv('positions.csv')
+```
+
+
+```{r}
+# When in export mode the little dots are unaligned, so fix that. 
+if(PDF_EXPORT){
+  cat("
+  <style>
+  :root{
+    --decorator-outer-offset-left: -6.5px;
+  }
+  </style>")
+}
+```
+
+Aside
+================================================================================
+
+
+![logo](website-icon.jpg){width=100%}
+
+```{r}
+# When in export mode the little dots are unaligned, so fix that. 
+if(PDF_EXPORT){
+  cat("View this CV online with links at _https://rickyduran.github.io/resume_")
+} else {
+  cat("[<i class='fas fa-download'></i> Download a PDF of this Resume](https://github.com/RickyDuran/cv/raw/master/duran_resume.pdf)")
+}
+```
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+
+- <i class="fa fa-envelope"></i> Ricky.Duran@asu.edu
+- <i class="fa fa-twitter"></i> NicholasStrayer
+- <i class="fa fa-github"></i> github.com/RickyDuran
+- <i class="fa fa-link"></i> [rickyduran.github.io](rickyduran.github.io)
+- <i class="fa fa-linkedin"></i> [linkedin.com/in/ rickyduraniii](linkedin.com/in/rickyduraniii)
+- <i class="fa fa-phone"></i> (602) 206-6337
+
+
+
+Skills {#skills}
+--------------------------------------------------------------------------------
+
+```{r}
+skills <- tribble(
+  ~skill,               ~level,
+  "Data Analysis",      5,
+  "Data Visualization", 5,
+  "Data Management",    4.5,
+  "Reporting",          4.5,
+  "Project Management", 4,
+  "Marketing & Design", 4,
+
+)
+
+build_skill_bars(skills)
+```
+
+
+
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+
+The source code is available at [github.com/RickyDuran/cv](https://github.com/RickyDuran/cv).
+
+Last updated on `r Sys.Date()`.
+
+
+
+
+Main
+================================================================================
+
+Ricky Duran {#title}
+--------------------------------------------------------------------------------
+
+
+```{r}
+intro_text <- "I am a current Master of Public Policy (MPP) Candidate with a strong interest in Data Sciences in Public Service. I have always been intrueged by data, and the stories it is capapble of telling us about the communities we study. With experience working across a diverse variety of sectors, I possess a broad and well versed understanding of how programs affect the communities for which they are implimented.
+
+My goal is to make a substantial contribution to by community by helping to tell the stories of our community data, and helping decision makers may well-infromed decisions for their communities. 
+"
+
+cat(sanitize_links(intro_text))
+```
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'education')
+```
+
+Data & Research Experience {data-icon=chart-line}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'data_research')
+```
+
+Additional Professional Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+::: aside
+In addition to roles as a data scientist and researcher, I have have also worked as a maketer and community educator. 
+:::
+
+```{r}
+print_section(position_data, 'other_professional')
+```
+
+Community Development Experience {data-icon=users}
+--------------------------------------------------------------------------------
+
+::: aside
+I beleve that in involvement in one's community helps them to be a better data scientist. Not only because it helps them to better understand its members, but because it also allows them to create solutions that are designed with those people in mind. 
+:::
+
+```{r}
+print_section(position_data, 'community_development')
+```
+
+<br>
+<br>
+<br>
+
+Selected Publications & Presentations {data-icon=chalkboard-teacher}
+--------------------------------------------------------------------------------
+
+::: aside
+As a community educator, I have developed various ways to communicate with community memebers, from marketing materials and social media, to presentations and publications. 
+:::
+
+```{r}
+print_section(position_data, 'publications_presentations')
+```
+
+
+
+```{r}
+if(PDF_EXPORT){
+  cat("
+  
+Links {data-icon=link}
+--------------------------------------------------------------------------------
+
+<br>
+
+
+")
+  
+  walk2(links, 1:length(links), function(link, index){
+    print(glue('{index}. {link}'))
+  })
+}
+```
+
+
